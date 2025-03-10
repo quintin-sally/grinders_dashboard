@@ -13,6 +13,9 @@ last_vs_grind = data[4]
 standings = data[5]
 
 creds_json = os.getenv("GOOGLE_CREDS")
+if not creds_json:
+    raise ValueError("Error: GOOGLE_CREDS is not set or is empty.")
+
 creds_dict = json.loads(creds_json)
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(
