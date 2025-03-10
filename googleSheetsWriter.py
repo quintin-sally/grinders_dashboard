@@ -12,7 +12,7 @@ last_five = data[3]
 last_vs_grind = data[4]
 standings = data[5]
 
-creds_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+creds_json = os.getenv("GOOGLE_CREDS")
 creds_dict = json.loads(creds_json)
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(
