@@ -2,7 +2,7 @@ name: Run Grinders Dashboard Script
 
 on:
   schedule:
-    - cron: '15 0 * * 2'  # Runs every Monday at 12:00 UTC
+    - cron: '22 0 * * 2'  # Runs every Monday at 12:00 UTC
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
