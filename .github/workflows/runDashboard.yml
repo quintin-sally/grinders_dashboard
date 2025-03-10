@@ -26,6 +26,8 @@ jobs:
       - name: Set up Google Credentials
         run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > creds.json
         shell: bash
+      - name: Debug Google Credentials
+        run: echo "GOOGLE_CREDENTIALS is set" && test -n "${{ secrets.GOOGLE_CREDENTIALS }}" && echo "Secret exists!" || echo "Secret is missing!"
 
       - name: Run Python script
         env:
