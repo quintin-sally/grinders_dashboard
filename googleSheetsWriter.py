@@ -12,9 +12,9 @@ last_five = data[3]
 last_vs_grind = data[4]
 standings = data[5]
 
-creds_json = os.getenv("GOOGLE_CREDS")
+creds_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 if not creds_json:
-    raise ValueError("Error: GOOGLE_CREDS is not set or is empty.")
+    raise ValueError("Error: GOOGLE_APPLICATION_CREDENTIALS is not set or is empty.")
 
 creds_dict = json.loads(creds_json)
 
