@@ -11,14 +11,11 @@ last_five = data[3]
 last_vs_grind = data[4]
 standings = data[5]
 
-
-credentials_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-
-if credentials_json is None:
-    return "Credentials not found"
+creds_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+creds_dict = json.loads(creds_json)
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(
-        json.loads(credentials_json),
+        creds_dict,
         scope=["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     )
 
