@@ -8,10 +8,9 @@ on:
 jobs:
   run-script:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -22,12 +21,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install beautifulsoup4
-          pip install pandas
           pip install -r requirements.txt
 
-      - name: Run script
+      - name: Set up Google Credentials
+        run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > creds.json
+        shell: bash
+
+      - name: Run Python script
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        run: |
-          echo "$GOOGLE_APPLICATION_CREDENTIALS" > creds.json
-          python googleSheetsWriter.py
+          GOOGLE_APPLICATION_CREDENTIALS: creds.json
+        run: python googleSheetsWriter.py
