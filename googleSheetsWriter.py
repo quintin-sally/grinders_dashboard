@@ -17,7 +17,7 @@ with open("creds.json", "r") as f:
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(
         creds_dict,
-        scope=["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+        scopes=["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     )
 
 #scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
