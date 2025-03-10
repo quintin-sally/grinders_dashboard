@@ -1,7 +1,7 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import dashboard_dataScraper as t
-import pandas as pd
+import os
 
 data = t.main()
 next_game = data[0]
