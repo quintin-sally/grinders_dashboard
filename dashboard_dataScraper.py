@@ -468,6 +468,7 @@ def main():
 
     game_info = get_game_info(opponent_id, curr_season)
     last_five = game_info[-5:]
+    last_vs_grind = None
     for g in game_info:
         if g['team_id'] == grinders_id:
             last_vs_grind = g
