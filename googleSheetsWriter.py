@@ -1,8 +1,6 @@
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 import dashboard_dataScraper as t
-import os
-import json
+import os, json, gspread
+from google.oauth2.service_account import Credentials
 
 data = t.main()
 next_game = data[0]
@@ -12,16 +10,18 @@ last_five = data[3]
 last_vs_grind = data[4]
 standings = data[5]
 
-with open("creds.json", "r") as f:
-    creds_dict = json.load(f)
+# Set up Google Sheets API credentials
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
+          'https://www.googleapis.com/auth/drive']
 
-creds = ServiceAccountCredentials.from_json_keyfile_dict(
-        creds_dict,
-        scopes=["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    )
+# Load credentials from environment variable
+###remove this later for environment variable logic
+###with open("/workspaces/grinders_dashboard/creds.json", "r") as f:
+###    service_account_info = json.load(f)
+service_account_info = json.loads(os.environ["GOOGLE_CREDENTIALS"]) #use this for environment variable logic
 
-#scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-#creds = ServiceAccountCredentials.from_json_keyfile_name(r"C:\Users\thech\Desktop\BeerLeagueStats\dashboard\python-project-431722-a3a0c9fb2d39.json", scope)
+creds = Credentials.from_service_account_info(service_account_info, scopes=SCOPES)
+
 client = gspread.authorize(creds)
 
 # --- Next Game Info --- #
@@ -88,7 +88,7 @@ games_data.append([last_vs_grind["opponent_name"]
     ,int(last_vs_grind["opponent_players"])
     , "Y"]
     )
-games.update(values=games_data, range_name="C1")
+games.update(values=games_data, range_name="C1") #update starting from C1 to avoid overwriting derived fields
 games.update(values=[["Rank", "Result"], [1], [2], [3], [4], [5], [6]], range_name="A1")
 formulas = [[f'=IF(D{i}>F{i}, "W", IF(ISBLANK(G{i}), "L", G{i}&"L"))'] for i in range(2, 8)]
 games.update(range_name="B2:B7", values=formulas, raw=False)
