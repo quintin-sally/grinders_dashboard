@@ -448,8 +448,10 @@ def main():
     next_game = get_next_game(curr_season, division, grinders_id)
     if next_game['home_id'] == grinders_id:
         opponent_id = next_game['away_id']
+        opponent_name = next_game['away']
     else:
         opponent_id = next_game['home_id']
+        opponent_name = next_game['home']
     standings = get_team_record(curr_season, division, grinders_id, opponent_id)
     opp_record = []
     for t in standings:
@@ -472,7 +474,39 @@ def main():
     for g in game_info:
         if g['team_id'] == grinders_id:
             last_vs_grind = g
-
+    ## if the last game was from the previous season, we need to get the last game from the previous season
+    if last_vs_grind is None:
+        prior_season = sorted(s)[-2]  # Get the previous seasonID
+        prior_division = get_division_ids_for_season(prior_season)[0][0] #pull the division ID for the previous season
+        prior_teams_stats = get_teams_and_stats(prior_season, prior_division) #get the list of teams and IDs from previous season
+        prior_opponent_id = None
+        prior_grinders_id = None
+        for t in prior_teams_stats: #looping through teams to get the previous season's ID for Grinders and their opponent
+            if prior_opponent_id and prior_grinders_id is not None:
+                break
+            if t['team_name'].lower() == opponent_name.lower():
+                prior_opponent_id = t['team_id']
+            if t['team_name'].lower() == 'grinders':
+                prior_grinders_id = t['team_id']
+        if prior_opponent_id: #if we find a match pull the opponent's games info
+            game_info_prior = get_game_info(prior_opponent_id, prior_season)
+            # Find the games against the grinders and then find the most recent game (max game_id).
+            games_with_grinders = [g for g in game_info_prior if g['team_id'] == prior_grinders_id]
+            if games_with_grinders:
+                last_vs_grind = max(games_with_grinders, key=lambda x: int(x['game_id']))
+    # Set default if still None
+    if last_vs_grind is None:
+        last_vs_grind = {
+            "opponent_id": 0,
+            "opponent_name": opponent_name,
+            "opponent_score": 0,
+            "team_id": 0,
+            "team_name": "Grinders",
+            "team_score": 0,
+            "extra_time": 0,
+            "game_id": 0,
+            "opponent_players": 0
+        }
     players = get_top_performers(opponent_id, curr_season)
     stars = players['Player Stats'][:3]
     
