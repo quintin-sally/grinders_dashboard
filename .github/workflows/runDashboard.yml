@@ -24,4 +24,4 @@ jobs:
         run: pip install gspread google-auth BeautifulSoup requests
 
       - name: Run googleSheetsWriter.py
-        run: python /workspaces/grinders_dashboard/googleSheetsWriter.py
+        run: python googleSheetsWriter.py
