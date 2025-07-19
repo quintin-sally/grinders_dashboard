@@ -21,7 +21,7 @@ jobs:
           python-version: 3.11
 
       - name: Install dependencies
-        run: pip install gspread google-auth
+        run: pip install gspread google-auth bs4 requests
 
       - name: Run googleSheetsWriter.py
         run: python googleSheetsWriter.py
